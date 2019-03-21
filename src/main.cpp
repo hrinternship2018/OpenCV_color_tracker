@@ -9,6 +9,7 @@ int main(){
 	auto a = *new ColorTracker(0);
 
     a.showCameraStatus();
+    a.showCaptureImage();
 
 
     return 0;

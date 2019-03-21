@@ -6,6 +6,8 @@
 using std::cout;
 using std::endl;
 using cv::VideoCapture;
+using cv::Mat;
+
 
 ColorTracker::ColorTracker(int cameraId){
     this->cameraId = cameraId;
@@ -42,5 +44,29 @@ void ColorTracker::showCameraStatus(){
     cout << "Height: " << this->cap.get(cv::CAP_PROP_FRAME_HEIGHT) << endl;
 }
 
+void ColorTracker::showCaptureImage(){
+    Mat img;
+    if(!this->cap.isOpened()){
+        cout << "fail to open camera" << endl;
+    }
+    else{
+        bool ret = this->cap.read(img);
+        if(!ret){
+            cout << "fail to get frame" << endl;
+            return;
+        }
+        else{
+            cv::imshow("showCaptureFrame",img);
+            cv::waitKey(0);
+            cv::destroyAllWindows();
+        }
+    }
+}
+
+void ColorTracker::imshow(Mat& img){
+    cv::imshow("imshow",img);
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+}
 
 
