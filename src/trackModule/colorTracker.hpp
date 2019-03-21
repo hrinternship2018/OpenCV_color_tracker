@@ -1,8 +1,6 @@
-#include <iostream>
+#pragma once
 
-using std::endl;
-using std::cout;
-
-void w(){
-    cout << "ha?" <<endl;
-}
+class colorTracker{
+public:
+    colorTracker(int cameraId);
+};

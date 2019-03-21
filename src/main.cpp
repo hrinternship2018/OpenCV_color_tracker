@@ -1,10 +1,8 @@
 #include <iostream>
-#include <opencv2/opencv.hpp>
+#include "trackModule/colorTracker.hpp"
 
 int main(){
-    cv::Mat img = cv::imread("../res/apple.jpg");
-    cv::imshow("View",img);
-    cv::waitKey();
+	colorTracker* a = new colorTracker(5);
 
     return 0;
 }
