@@ -1,1 +1,2 @@
-# OpenCV_color_tracker
+# openCV_color_tracker
+これは東京大学五月祭工学展覧会の制御班が制作する、二次元倒立振子に必要となっているコンピュータビジョンのモジュールである。
