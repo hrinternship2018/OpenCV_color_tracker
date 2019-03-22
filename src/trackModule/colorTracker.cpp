@@ -13,7 +13,7 @@ ColorTracker::ColorTracker(int cameraId){
     this->cameraId = cameraId;
     this->cap = *new VideoCapture(cameraId);
 	if (this->cap.isOpened()) {
-		cout << "successed to allocate camera: " << this->cameraId << endl;
+		cout << "succeeded to allocate camera: " << this->cameraId << endl;
         this->width = (int) this->cap.get(cv::CAP_PROP_FRAME_WIDTH);
         this->height = (int) this->cap.get(cv::CAP_PROP_FRAME_HEIGHT);
 	}
@@ -31,7 +31,7 @@ ColorTracker::~ColorTracker(){
     }
     this->cap.release();
 	if (!this->cap.isOpened()) {
-		cout << "successed to release camera: " << this->cameraId << endl;
+		cout << "succeeded to release camera: " << this->cameraId << endl;
 	}
 	else {
 		cout << "failed to release camera: " << this->cameraId << endl;
@@ -47,12 +47,12 @@ void ColorTracker::showCameraStatus(){
 void ColorTracker::showCaptureImage(){
     Mat img;
     if(!this->cap.isOpened()){
-        cout << "fail to open camera" << endl;
+        cout << "failed to open camera" << endl;
     }
     else{
         bool ret = this->cap.read(img);
         if(!ret){
-            cout << "fail to get frame" << endl;
+            cout << "failed to get frame" << endl;
             return;
         }
         else{
