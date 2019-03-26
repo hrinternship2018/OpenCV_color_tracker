@@ -11,6 +11,9 @@ int main(){
     a.showCameraStatus();
     a.showCaptureImage();
 
+    auto img = a.getCaptureImage();
+    a.imshow(img);
+
 
     return 0;
 }

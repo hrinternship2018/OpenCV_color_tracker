@@ -63,6 +63,23 @@ void ColorTracker::showCaptureImage(){
     }
 }
 
+Mat ColorTracker::getCaptureImage(){
+    Mat img;
+    if(!this->cap.isOpened()){
+        cout << "failed to open camera" << endl;
+    }
+    else{
+        bool ret = this->cap.read(img);
+        if(!ret){
+            cout << "failed to get frame" << endl;
+        }
+        else{
+        }
+    }
+    return img;
+
+}
+
 void ColorTracker::imshow(Mat& img){
     cv::imshow("imshow",img);
     cv::waitKey(0);

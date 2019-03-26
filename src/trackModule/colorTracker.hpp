@@ -18,5 +18,7 @@ public:
     void showCameraStatus();
     void showCaptureImage();
 
+    Mat getCaptureImage();
+
     static void imshow(Mat& img);
 };
