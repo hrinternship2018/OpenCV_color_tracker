@@ -1,15 +1,23 @@
 #pragma once
 #include <iostream>
+#include <exception>
+#include <string>
 #include <opencv2/opencv.hpp>
 #include "colorTracker.hpp"
+#include "cameraException.hpp"
+
+#define WHERE "in " + string(__FILE__)+", at Line "+ to_string(__LINE__) +  ", " + string(__func__) + "(): "
 
 using std::cout;
 using std::endl;
 using cv::VideoCapture;
 using cv::Mat;
+using std::exception;
+using std::to_string;
+using std::string;
 
 
-ColorTracker::ColorTracker(int cameraId){
+ColorTracker::ColorTracker(int cameraId) noexcept(false){
     this->cameraId = cameraId;
     this->cap = *new VideoCapture(cameraId);
 	if (this->cap.isOpened()) {
@@ -19,13 +27,12 @@ ColorTracker::ColorTracker(int cameraId){
 	}
 	else {
 		cout << "failed to allocate camera: " << this->cameraId << endl;
-        cout << "terminate program" << endl;
         this->cap.release();
-		exit(1);
+		throw CameraException(WHERE + "failed to allocate camera: " + to_string(this->cameraId));
 	}
 }
 
-ColorTracker::~ColorTracker(){
+ColorTracker::~ColorTracker() noexcept{
     if(!this->cap.isOpened()){
         return;
     }
@@ -63,17 +70,17 @@ void ColorTracker::showCaptureImage(){
     }
 }
 
-Mat ColorTracker::getCaptureImage(){
+Mat ColorTracker::getCaptureImage() noexcept(false){
     Mat img;
     if(!this->cap.isOpened()){
         cout << "failed to open camera" << endl;
+		throw CameraException(WHERE + "failed to open camera");
     }
     else{
         bool ret = this->cap.read(img);
         if(!ret){
             cout << "failed to get frame" << endl;
-        }
-        else{
+		    throw CameraException(WHERE + "failed to get frame");
         }
     }
     return img;

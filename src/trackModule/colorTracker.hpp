@@ -12,13 +12,14 @@ private:
     int width;
     int height;
 public:
-    ColorTracker(int cameraId);
-    ~ColorTracker();
+    ColorTracker(int cameraId) noexcept(false);// throw std::exception
+    ~ColorTracker() noexcept;
 
     void showCameraStatus();
     void showCaptureImage();
 
-    Mat getCaptureImage();
+    Mat getCaptureImage() noexcept(false);//throw std::exception
 
-    static void imshow(Mat& img);
+    static void imshow(Mat& img) noexcept(false);// throw std::exception
+
 };
