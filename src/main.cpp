@@ -16,10 +16,9 @@ void exceptionHandler(exception& e){
 
 
 
-
 int main() try{
     
-    auto a = *new ColorTracker(1);
+    /*auto a = *new ColorTracker(0);
 
     a.showCameraStatus();
     a.showCaptureImage();
@@ -28,8 +27,21 @@ int main() try{
 
     a.imshow(img);
 
-    return 0;
+    return 0;*/
 
+    auto img = cv::imread("../res/apple.jpg");
+    //auto mask = ColorTracker::getHue(img);
+    auto mask = ColorTracker::getColorMask(img,rangeRed);
+
+    auto a = ColorTracker::getContours(mask);
+
+    cv::drawContours(img,a,-1,cv::Scalar(255,255,255));
+
+    ColorTracker::imshow(img);
+
+    
+
+    //cout << rangeRed.high << endl;
 
 } catch(exception& e){
 
