@@ -1,12 +1,14 @@
 #pragma once
 #include <iostream>
 #include <exception>
+#include <vector>
 #include <opencv2/opencv.hpp>
 #include "trackModule/colorTracker.hpp"
 
 using std::cout;
 using std::endl;
 using std::exception;
+using std::vector;
 
 void exceptionHandler(exception& e){
     cout << endl << "called exception = " << typeid(e).name() << endl;
@@ -18,30 +20,38 @@ void exceptionHandler(exception& e){
 
 int main() try{
     
-    /*auto a = *new ColorTracker(0);
+    auto a = *new ColorTracker(0);
 
     a.showCameraStatus();
-    a.showCaptureImage();
 
-    auto img = a.getCaptureImage();
+    while(true){
+        auto img = a.getCaptureImage();
+        auto mask = a.getColorMask(img,rangeRed);
+        auto contours = a.getConvexContours(mask);
+        try{
+            auto contour = a.getMaxAreaContour(contours);
+            vector<vector<Point>> temp{contour};
+            cv::drawContours(img,temp,0,cv::Scalar(255,255,255),5);
+        } catch (exception& e){
+            cout << e.what() << endl;
+        }
+        cv::imshow("a",img);
+        auto ret = cv::waitKey(1);
+        if(ret != -1){
+            break;
+        }
 
-    a.imshow(img);
+    }
+    
+    return 0;
 
-    return 0;*/
 
-    auto img = cv::imread("../res/apple.jpg");
-    //auto mask = ColorTracker::getHue(img);
-    auto mask = ColorTracker::getColorMask(img,rangeRed);
 
-    auto a = ColorTracker::getContours(mask);
-
-    cv::drawContours(img,a,-1,cv::Scalar(255,255,255));
-
-    ColorTracker::imshow(img);
 
     
 
-    //cout << rangeRed.high << endl;
+
+
 
 } catch(exception& e){
 

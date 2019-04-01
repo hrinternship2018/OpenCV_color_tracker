@@ -5,6 +5,7 @@
 using cv::VideoCapture;
 using cv::Mat;
 using cv::Point;
+using cv::Point2d;
 using std::vector;
 
 
@@ -31,7 +32,7 @@ public:
     void showCaptureImage() noexcept(false);//throw std::exception
     Mat getCaptureImage() noexcept(false);//throw std::exception
 
-    static void imshow(const Mat& img) noexcept(false);//throw std::exception
+    static void showImg(const Mat& img) noexcept(false);//throw std::exception
 
     //BGR2HSV
     static Mat getHSV(const Mat& img) noexcept(false);//throw std::exception
@@ -44,6 +45,12 @@ public:
     //get contours
     static vector<vector<Point>> getContours(const Mat& mask) noexcept(false);//throw std::exception
 
+    //get convex contours
+    static vector<vector<Point>> getConvexContours(const Mat& mask) noexcept(false);//throw std::exception
+
+    //get maxArea contour
+    static vector<Point> getMaxAreaContour(const vector<vector<Point>>& contours) noexcept(false);//throw std::exception
     
-    
+    //get center point
+    static Point2d getCenterPoint(const vector<Point>& contour) noexcept(false);//throw std::exception
 };

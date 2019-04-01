@@ -39,5 +39,8 @@
     <ClInclude Include="src\trackModule\cameraException.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="src\trackModule\processingException.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -33,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="src\trackModule\cameraException.hpp" />
     <ClInclude Include="src\trackModule\colorTracker.hpp" />
+    <ClInclude Include="src\trackModule\processingException.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

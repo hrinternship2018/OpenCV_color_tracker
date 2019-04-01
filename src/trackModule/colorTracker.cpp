@@ -15,6 +15,7 @@ using std::endl;
 using cv::VideoCapture;
 using cv::Mat;
 using cv::Point;
+using cv::Point2d;
 using std::exception;
 using std::to_string;
 using std::string;
@@ -91,8 +92,8 @@ Mat ColorTracker::getCaptureImage() noexcept(false){
 
 }
 
-void ColorTracker::imshow(const Mat& img){
-    cv::imshow("imshow",img);
+void ColorTracker::showImg(const Mat& img){
+    cv::imshow("showImg",img);
     cv::waitKey(0);
     cv::destroyAllWindows();
 }
@@ -182,11 +183,65 @@ Mat ColorTracker::getColorMask(const Mat& imgBGR,const colorRange& range){
 
 }
 
-
 vector<vector<Point>> ColorTracker::getContours(const Mat& mask) noexcept(false){
+    if(mask.channels()!=1){
+        cout << "invalid input" << endl;
+        throw ProcessingException(WHERE + "invalid input: passed image must have 1 channel");
+    }
     vector<vector<Point>> contours;
 
     cv::findContours(mask,contours,cv::RETR_EXTERNAL,cv::CHAIN_APPROX_TC89_L1);
-    
+
     return contours;
 }
+
+vector<vector<Point>> ColorTracker::getConvexContours(const Mat& mask) noexcept(false){
+    if(mask.channels()!=1){
+        cout << "invalid input" << endl;
+        throw ProcessingException(WHERE + "invalid input: passed image must have 1 channel");
+    }
+    auto contours = getContours(mask);
+
+    vector<vector<Point>> convexHulls;
+
+    for(vector<Point> contour : contours){
+        vector<Point> convexHull;
+        cv::convexHull(contour,convexHull);
+        convexHulls.push_back(convexHull);
+    }
+
+    return convexHulls;
+}
+
+vector<Point> ColorTracker::getMaxAreaContour(const vector<vector<Point>>& contours) noexcept(false){
+    if(contours.empty()){
+        cout << "given contours list length is 0" << endl;
+        throw ProcessingException(WHERE + "invalid input: given contours list length is 0");
+    }
+    
+    vector<double> area;
+    for(vector<Point> contour : contours){
+        area.push_back(cv::contourArea(contour));
+    }
+
+    auto maxIter = std::max_element(area.begin(),area.end());
+    auto maxIndex = std::distance(area.begin(),maxIter);
+
+    return contours.at(maxIndex);
+}
+
+Point2d ColorTracker::getCenterPoint(const vector<Point>& contour) noexcept(false){
+    if(contour.empty()){
+        cout << "given contour has no point" << endl;
+        throw ProcessingException(WHERE + "invalid input: given contour has no point");
+    }
+    auto m = cv::moments(contour,true);
+    if(m.m00 == 0){
+        cout << "given contour has no area" << endl;
+        throw ProcessingException(WHERE + "given contour has no area");
+    }
+    const double x = m.m10 / m.m00;
+    const double y = m.m01 / m.m00;
+    return Point2d(x, y);
+}
+
