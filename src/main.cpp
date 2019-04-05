@@ -2,6 +2,7 @@
 #include <iostream>
 #include <exception>
 #include <vector>
+#include <future>
 #include <opencv2/opencv.hpp>
 #include "trackModule/colorTracker.hpp"
 
@@ -19,38 +20,21 @@ void exceptionHandler(exception& e){
 
 
 int main() try{
+
     
     auto a = *new ColorTracker(0);
 
-    a.showCameraStatus();
+    //async introduction
+    //カメラ2台だと、並行処理しないとfpsがシビアなので追加
+    std::future<cv::Point2d> f1= std::async( std::launch::async , [&]()-> cv::Point2d { return a.predict(rangeRed); });
+    auto point = f1.get();
 
-    while(true){
-        auto img = a.getCaptureImage();
-        auto mask = a.getColorMask(img,rangeRed);
-        auto contours = a.getConvexContours(mask);
-        try{
-            auto contour = a.getMaxAreaContour(contours);
-            vector<vector<Point>> temp{contour};
-            cv::drawContours(img,temp,0,cv::Scalar(255,255,255),5);
-        } catch (exception& e){
-            cout << e.what() << endl;
-        }
-        cv::imshow("a",img);
-        auto ret = cv::waitKey(1);
-        if(ret != -1){
-            break;
-        }
-
-    }
+    cout << point << endl;
     
+    
+
     return 0;
-
-
-
-
     
-
-
 
 
 } catch(exception& e){

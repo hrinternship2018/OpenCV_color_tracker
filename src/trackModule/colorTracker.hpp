@@ -29,8 +29,11 @@ public:
     ~ColorTracker() noexcept;
 
     void showCameraStatus();
-    void showCaptureImage() noexcept(false);//throw std::exception
+    void showCaptureImage();
     Mat getCaptureImage() noexcept(false);//throw std::exception
+
+    //Capture image and get center point of max area matched color region
+    Point2d predict(const colorRange& range) noexcept(false);//throw std::exception
 
     static void showImg(const Mat& img) noexcept(false);//throw std::exception
 

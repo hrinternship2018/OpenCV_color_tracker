@@ -92,6 +92,22 @@ Mat ColorTracker::getCaptureImage() noexcept(false){
 
 }
 
+Point2d ColorTracker::predict(const colorRange& range) noexcept(false){
+    auto img = this->getCaptureImage();
+    auto mask = getColorMask(img,range);
+    auto contours = getConvexContours(mask);
+    vector<Point> contour;
+    try{
+        contour = getMaxAreaContour(contours);
+    } catch(ProcessingException){
+        throw ProcessingException(WHERE + "any contour has not been detected");
+    }
+
+    auto center = getCenterPoint(contour);
+
+    return center;
+}
+
 void ColorTracker::showImg(const Mat& img){
     cv::imshow("showImg",img);
     cv::waitKey(0);
@@ -100,7 +116,7 @@ void ColorTracker::showImg(const Mat& img){
 
 Mat ColorTracker::getHSV(const Mat& imgBGR){
     if(imgBGR.channels()!=3){
-        cout << "invalid input" << endl;
+        //cout << "invalid input" << endl;
         throw ProcessingException(WHERE + "invalid input: passed image must have 3 channels");
     }
 
@@ -112,7 +128,7 @@ Mat ColorTracker::getHSV(const Mat& imgBGR){
 
 Mat ColorTracker::getHue(const Mat& imgBGR){
     if(imgBGR.channels()!=3){
-        cout << "invalid input" << endl;
+        //cout << "invalid input" << endl;
         throw ProcessingException(WHERE + "invalid input: passed image must have 3 channels");
     }
 
@@ -128,7 +144,7 @@ Mat ColorTracker::getHue(const Mat& imgBGR){
 
 Mat ColorTracker::getColorMask(const Mat& imgBGR,const colorRange& range){
     if(imgBGR.channels()!=3){
-        cout << "invalid input" << endl;
+        //cout << "invalid input" << endl;
         throw ProcessingException(WHERE + "invalid input: passed image must have 3 channels");
     }
 
@@ -185,7 +201,7 @@ Mat ColorTracker::getColorMask(const Mat& imgBGR,const colorRange& range){
 
 vector<vector<Point>> ColorTracker::getContours(const Mat& mask) noexcept(false){
     if(mask.channels()!=1){
-        cout << "invalid input" << endl;
+        //cout << "invalid input" << endl;
         throw ProcessingException(WHERE + "invalid input: passed image must have 1 channel");
     }
     vector<vector<Point>> contours;
@@ -197,7 +213,7 @@ vector<vector<Point>> ColorTracker::getContours(const Mat& mask) noexcept(false)
 
 vector<vector<Point>> ColorTracker::getConvexContours(const Mat& mask) noexcept(false){
     if(mask.channels()!=1){
-        cout << "invalid input" << endl;
+        //cout << "invalid input" << endl;
         throw ProcessingException(WHERE + "invalid input: passed image must have 1 channel");
     }
     auto contours = getContours(mask);
@@ -215,7 +231,7 @@ vector<vector<Point>> ColorTracker::getConvexContours(const Mat& mask) noexcept(
 
 vector<Point> ColorTracker::getMaxAreaContour(const vector<vector<Point>>& contours) noexcept(false){
     if(contours.empty()){
-        cout << "given contours list length is 0" << endl;
+        //cout << "given contours list length is 0" << endl;
         throw ProcessingException(WHERE + "invalid input: given contours list length is 0");
     }
     
@@ -232,12 +248,12 @@ vector<Point> ColorTracker::getMaxAreaContour(const vector<vector<Point>>& conto
 
 Point2d ColorTracker::getCenterPoint(const vector<Point>& contour) noexcept(false){
     if(contour.empty()){
-        cout << "given contour has no point" << endl;
+        //cout << "given contour has no point" << endl;
         throw ProcessingException(WHERE + "invalid input: given contour has no point");
     }
     auto m = cv::moments(contour,true);
     if(m.m00 == 0){
-        cout << "given contour has no area" << endl;
+        //cout << "given contour has no area" << endl;
         throw ProcessingException(WHERE + "given contour has no area");
     }
     const double x = m.m10 / m.m00;
