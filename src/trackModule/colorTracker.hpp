@@ -15,6 +15,8 @@ struct colorRange {
 };
 
 const colorRange rangeRed = { cv::Scalar(160,50,50) , cv::Scalar(200,255,255) };
+const colorRange rangeBlue = { cv::Scalar(100,50,50) , cv::Scalar(140,255,255) };
+const colorRange rangeGreen = { cv::Scalar(40,50,50) , cv::Scalar(80,255,255) };
 
 
 class ColorTracker{
