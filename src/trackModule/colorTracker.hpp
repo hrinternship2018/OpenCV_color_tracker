@@ -14,7 +14,7 @@ struct colorRange {
     cv::Scalar high;
 };
 
-const colorRange rangeRed = { cv::Scalar(160,50,50) , cv::Scalar(200,255,255) };
+const colorRange rangeRed = { cv::Scalar(160,200,50) , cv::Scalar(200,255,255) };
 const colorRange rangeBlue = { cv::Scalar(100,50,50) , cv::Scalar(140,255,255) };
 const colorRange rangeGreen = { cv::Scalar(40,50,50) , cv::Scalar(80,255,255) };
 
@@ -36,6 +36,7 @@ public:
 
     //Capture image and get center point of max area matched color region
     Point2d predict(const colorRange& range) noexcept(false);//throw std::exception
+    Point2d predictShow(const colorRange& range) noexcept(false);//throw std::exception
 
     static void showImg(const Mat& img) noexcept(false);//throw std::exception
 

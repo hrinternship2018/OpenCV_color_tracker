@@ -108,6 +108,38 @@ Point2d ColorTracker::predict(const colorRange& range) noexcept(false){
     return center;
 }
 
+Point2d ColorTracker::predictShow(const colorRange& range) noexcept(false){
+    auto img = this->getCaptureImage();
+    auto mask = getColorMask(img,range);
+    auto failflag = false;
+    vector<Point> contour;
+    try{
+        auto contours = getConvexContours(mask);
+        contour = getMaxAreaContour(contours);
+
+        vector<vector<Point>> temp;
+        
+        temp.push_back(contour);
+        cv::drawContours(img,temp,0,cv::Scalar(0,255,0),5);
+        cv::putText(img,"x: " + to_string(getCenterPoint(contour).x - img.cols/2),cv::Point(10,100),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(0,0,255),2);
+
+    } catch(ProcessingException){
+        cv::putText(img,"Not detected",cv::Point(10,100),cv::FONT_HERSHEY_SIMPLEX,1.2,cv::Scalar(0,255,0),2);
+        failflag = true;
+    }
+
+    cv::imshow("predictShow camera: " + to_string(this->cameraId),img);
+    cv::waitKey(1);
+    
+    if(failflag){
+        throw ProcessingException(WHERE + "any contour has not been detected");
+    }
+
+    auto center = getCenterPoint(contour);
+
+    return center;
+}
+
 void ColorTracker::showImg(const Mat& img){
     cv::imshow("showImg",img);
     cv::waitKey(0);
