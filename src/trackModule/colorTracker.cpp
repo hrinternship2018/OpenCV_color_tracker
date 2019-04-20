@@ -51,6 +51,14 @@ ColorTracker::~ColorTracker() noexcept{
     return;
 }
 
+int ColorTracker::getWidth() noexcept{
+    return this->width;
+}
+
+int ColorTracker::getHeight() noexcept{
+    return this->height;
+}
+
 void ColorTracker::showCameraStatus(){
     cout << "Width: " << this->cap.get(cv::CAP_PROP_FRAME_WIDTH) << endl;
     cout << "Height: " << this->cap.get(cv::CAP_PROP_FRAME_HEIGHT) << endl;

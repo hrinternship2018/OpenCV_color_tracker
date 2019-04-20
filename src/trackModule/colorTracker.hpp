@@ -30,6 +30,10 @@ public:
     ColorTracker(int cameraId) noexcept(false);//throw std::exception
     ~ColorTracker() noexcept;
 
+    int getWidth() noexcept;
+    int getHeight() noexcept;
+
+
     void showCameraStatus();
     void showCaptureImage();
     Mat getCaptureImage() noexcept(false);//throw std::exception

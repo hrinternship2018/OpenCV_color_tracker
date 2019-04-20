@@ -5,6 +5,7 @@
 #include <future>
 #include <opencv2/opencv.hpp>
 #include "trackModule/colorTracker.hpp"
+#include "trackModule/cameraHandler.hpp"
 
 using std::cout;
 using std::endl;
@@ -21,16 +22,13 @@ void exceptionHandler(exception& e){
 
 int main() try{
 
-    
-    auto a = *new ColorTracker(0);
+    auto a = CameraHandler();
 
-    //async introduction
-    //カメラ2台だと、並行処理しないとfpsがシビアなので追加
-    std::future<cv::Point2d> f1= std::async( std::launch::async , [&]()-> cv::Point2d { return a.predict(rangeRed); });
-    auto point = f1.get();
 
-    cout << point << endl;
-    
+    while(true){
+        auto r = a.getAngles();
+        cout << r[0] << endl;
+    }
     
 
     return 0;
